@@ -14,68 +14,82 @@ class HomeScreen extends StatelessWidget {
         () =>
             noteController.notes.isEmpty
                 ? emptyState(context)
-                : Container(
-                  padding: EdgeInsets.only(
-                    top: MediaQuery.viewPaddingOf(context).top + 24,
-                  ),
-                  width: MediaQuery.sizeOf(context).width,
-                  child: Wrap(
-                    alignment: WrapAlignment.spaceEvenly,
-                    runSpacing: 16,
-                    children: [
-                      for (
-                        int index = 0;
-                        index < noteController.notes.length;
-                        index++
-                      ) ...[
-                        GestureDetector(
-                          onTap: () {
-                            Get.to(
-                              () => NoteDetailScreen(
-                                note: noteController.notes[index],
-                              ),
-                            );
-                          },
-                          child: SizedBox(
-                            width: MediaQuery.sizeOf(context).width * 0.45,
-                            height: MediaQuery.sizeOf(context).width * 0.5,
-                            child: Card(
-                              color: Color(0xff394675),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      noteController.notes[index].title ?? '',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelMedium
-                                          ?.copyWith(color: Colors.white),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
+                : Stack(
+                  children: [
+                    Center(
+                      child: Image.asset(
+                        "assets/images/logo-trans.png",
+                        opacity: const AlwaysStoppedAnimation(0.1),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.viewPaddingOf(context).top + 24,
+                      ),
+                      width: MediaQuery.sizeOf(context).width,
+                      child: Wrap(
+                        alignment: WrapAlignment.spaceEvenly,
+                        runSpacing: 16,
+                        children: [
+                          for (
+                            int index = 0;
+                            index < noteController.notes.length;
+                            index++
+                          ) ...[
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(
+                                  () => NoteDetailScreen(
+                                    note: noteController.notes[index],
+                                  ),
+                                );
+                              },
+                              child: SizedBox(
+                                width: MediaQuery.sizeOf(context).width * 0.45,
+                                height: MediaQuery.sizeOf(context).width * 0.5,
+                                child: Card(
+                                  color: Color(0xff394675),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          noteController.notes[index].title ??
+                                              '',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelMedium
+                                              ?.copyWith(color: Colors.white),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            noteController
+                                                    .notes[index]
+                                                    .content ??
+                                                '',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.copyWith(color: Colors.white),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 6,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Expanded(
-                                      child: Text(
-                                        noteController.notes[index].content ??
-                                            '',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall
-                                            ?.copyWith(color: Colors.white),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 6,
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
       ),
 
