@@ -81,6 +81,7 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
+        scaffoldBackgroundColor: Colors.white,
       ),
       home: Obx(
         () => authController.isLoggedIn.value ? HomeScreen() : SigninScreen(),
