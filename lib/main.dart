@@ -18,7 +18,69 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+        textTheme: TextTheme(
+          labelSmall: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+          ),
+          labelMedium: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+          labelLarge: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+          ),
+          titleSmall: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+          ),
+          titleMedium: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+          titleLarge: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+          bodySmall: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+          ),
+          bodyMedium: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+          ),
+          bodyLarge: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+          ),
+          headlineSmall: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
+          headlineMedium: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+          ),
+          headlineLarge: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 32,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
       ),
       home: Obx(
         () => authController.isLoggedIn.value ? HomeScreen() : SigninScreen(),

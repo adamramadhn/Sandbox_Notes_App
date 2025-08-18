@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sandbox_notes_app/controllers/auth_controller.dart';
+import 'package:sandbox_notes_app/screens/signup_screen.dart';
 
 class SigninScreen extends StatelessWidget {
   const SigninScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final authController = Get.put(AuthController());
+    final authController = Get.find<AuthController>();
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Form(
-            key: authController.formKey,
+            key: authController.formKeySignin,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,13 +25,12 @@ class SigninScreen extends StatelessWidget {
                   'And notes your idea',
                   style: TextTheme.of(
                     context,
-                  ).titleSmall?.copyWith(color: Colors.grey),
+                  ).bodyMedium?.copyWith(color: Colors.grey),
                 ),
                 SizedBox(height: 24),
-                Text('Email Address', style: TextTheme.of(context).labelLarge),
+                Text('Email Address', style: TextTheme.of(context).labelMedium),
                 SizedBox(height: 8),
                 TextFormField(
-                  controller: authController.emailController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
@@ -40,12 +40,14 @@ class SigninScreen extends StatelessWidget {
                     }
                     return null;
                   },
+                  onSaved: (newValue) {
+                    authController.emailController.value = newValue ?? '';
+                  },
                 ),
                 SizedBox(height: 16),
-                Text('Password', style: TextTheme.of(context).labelLarge),
+                Text('Password', style: TextTheme.of(context).labelMedium),
                 SizedBox(height: 8),
                 TextFormField(
-                  controller: authController.passwordController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
@@ -55,10 +57,16 @@ class SigninScreen extends StatelessWidget {
                     }
                     return null;
                   },
+                  onSaved: (newValue) {
+                    authController.passwordController.value = newValue ?? '';
+                  },
+                  obscureText: true,
+                  obscuringCharacter: '*',
                 ),
                 GestureDetector(
                   onTap: () {
-                    if (authController.formKey.currentState!.validate()) {
+                    if (authController.formKeySignin.currentState!.validate()) {
+                      authController.formKeySignin.currentState!.save();
                       authController.doSignIn();
                     }
                   },
@@ -73,7 +81,7 @@ class SigninScreen extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "Login",
-                        style: TextTheme.of(context).labelLarge?.copyWith(
+                        style: TextTheme.of(context).labelMedium?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
@@ -82,11 +90,18 @@ class SigninScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 16),
-                Text(
-                  "Don't have any account? Register here",
-                  style: TextTheme.of(
-                    context,
-                  ).labelLarge?.copyWith(color: Color(0xff394675)),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => const SignupScreen());
+                  },
+                  child: Center(
+                    child: Text(
+                      "Don't have any account? Register here",
+                      style: TextTheme.of(
+                        context,
+                      ).bodyMedium?.copyWith(color: Color(0xff394675)),
+                    ),
+                  ),
                 ),
               ],
             ),
