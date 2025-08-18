@@ -14,52 +14,59 @@ class NoteDetailScreen extends StatefulWidget {
 }
 
 class _NoteDetailScreenState extends State<NoteDetailScreen> {
-  final _formKey = GlobalKey<FormState>();
-  late TextEditingController _noteController;
   final NoteController noteController = Get.find();
-  final FocusNode _focusNode = FocusNode();
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController _contentController;
+  late TextEditingController _titleController;
+  final FocusNode _focusNodeTitle = FocusNode();
+  final FocusNode _focusNodeContent = FocusNode();
   late String _initialNoteContent;
+  late String _initialNoteTitle;
 
   @override
   void initState() {
     super.initState();
-    _focusNode.requestFocus();
-    final initialContent =
-        (widget.note?.title != null && widget.note?.title?.isNotEmpty == true)
-            ? '${widget.note!.title}\n${widget.note!.content}'
-            : widget.note?.content ?? '';
-    _noteController = TextEditingController(text: initialContent);
-    _initialNoteContent = initialContent;
+    if (widget.note == null) {
+      _focusNodeTitle.requestFocus();
+    } else {
+      _focusNodeContent.requestFocus();
+    }
+    _contentController = TextEditingController(text: widget.note?.content);
+    _titleController = TextEditingController(text: widget.note?.title);
+    _initialNoteContent = widget.note?.content ?? '';
+    _initialNoteTitle = widget.note?.title ?? '';
   }
 
   @override
   void dispose() {
-    _noteController.dispose();
-    _focusNode.dispose();
+    _titleController.dispose();
+    _contentController.dispose();
+    _focusNodeTitle.dispose();
+    _focusNodeContent.dispose();
     super.dispose();
   }
 
   void _saveNote({bool isAutoSave = false}) {
-    final fullText = _noteController.text;
-    if (isAutoSave && fullText == _initialNoteContent) {
+    final title = _titleController.text;
+    final content = _contentController.text;
+    if (isAutoSave &&
+        content == _initialNoteContent &&
+        title == _initialNoteTitle) {
       return;
     }
-    if (fullText.isEmpty) {
+    if (content.isEmpty && title.isEmpty) {
       Get.back();
       Get.back();
       return;
     }
-
-    final lines = fullText.split('\n');
-    final title = lines.isNotEmpty ? lines.first : '';
-    final content = lines.length > 1 ? lines.sublist(1).join('\n') : '';
 
     if (widget.note == null) {
       noteController.addNote(title, content);
     } else {
       noteController.updateNote(widget.note!.id!, title, content);
     }
-    _initialNoteContent = _noteController.text;
+    _initialNoteTitle = _titleController.text;
+    _initialNoteContent = _contentController.text;
     if (!isAutoSave) {
       Get.back();
       Get.back();
@@ -139,18 +146,40 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             key: _formKey,
             child: Column(
               children: [
+                TextFormField(
+                  focusNode: _focusNodeTitle,
+                  controller: _titleController,
+                  textAlignVertical: TextAlignVertical.top,
+                  style: Theme.of(context).textTheme.labelLarge,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(0),
+                  ),
+                  onEditingComplete: () {
+                    FocusScope.of(context).requestFocus(_focusNodeContent);
+                  },
+                  autocorrect: false,
+                  enableSuggestions: false,
+                ),
                 Expanded(
                   child: TextFormField(
-                    focusNode: _focusNode,
-                    controller: _noteController,
+                    focusNode: _focusNodeContent,
+                    controller: _contentController,
                     maxLines: null,
                     expands: true,
                     textAlignVertical: TextAlignVertical.top,
-                    style: const TextStyle(fontSize: 16),
+                    style: Theme.of(context).textTheme.bodyMedium,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(0),
                     ),
+                    onChanged: (value) {
+                      if (value.isEmpty) {
+                        FocusScope.of(context).requestFocus(_focusNodeTitle);
+                      }
+                    },
+                    autocorrect: false,
+                    enableSuggestions: false,
                   ),
                 ),
                 if (widget.note?.createdAt != null)
