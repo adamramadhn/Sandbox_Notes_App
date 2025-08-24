@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sandbox_notes_app/controllers/auth_controller.dart';
 import 'package:sandbox_notes_app/screens/home_screen.dart';
 import 'package:sandbox_notes_app/screens/signin_screen.dart';
+import 'package:sandbox_notes_app/storage/note_item_model.dart';
+import 'package:sandbox_notes_app/storage/user.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(NoteItemModelAdapter());
   runApp(const MyApp());
 }
 

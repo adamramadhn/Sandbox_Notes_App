@@ -40,6 +40,9 @@ class SignupScreen extends StatelessWidget {
                     }
                     return null;
                   },
+                  onSaved: (newValue) {
+                    authController.fullNameController.value = newValue ?? '';
+                  },
                 ),
                 SizedBox(height: 16),
                 Text('Email Address', style: TextTheme.of(context).labelMedium),
@@ -54,6 +57,9 @@ class SignupScreen extends StatelessWidget {
                       return 'Please enter your email';
                     }
                     return null;
+                  },
+                  onSaved: (newValue) {
+                    authController.emailController.value = newValue ?? '';
                   },
                 ),
                 SizedBox(height: 16),
@@ -79,7 +85,12 @@ class SignupScreen extends StatelessWidget {
                   onTap: () {
                     authController.formKeySignup.currentState?.save();
                     if (authController.formKeySignup.currentState!.validate()) {
-                      authController.doSignIn();
+                      authController.register(
+                        context,
+                        email: authController.emailController.value,
+                        name: authController.fullNameController.value,
+                        password: authController.passwordController.value,
+                      );
                     }
                   },
                   child: Container(

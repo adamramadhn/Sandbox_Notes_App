@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sandbox_notes_app/models/note_item_model.dart';
+import 'package:sandbox_notes_app/storage/note_item_model.dart';
 
 import '../controllers/note_controller.dart';
 
@@ -63,7 +63,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     if (widget.note == null) {
       noteController.addNote(title, content);
     } else {
-      noteController.updateNote(widget.note!.id!, title, content);
+      noteController.updateNote(widget.note!.id, title, content);
     }
     _initialNoteTitle = _titleController.text;
     _initialNoteContent = _contentController.text;
@@ -118,7 +118,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                               manageNote(
                                 onTap:
                                     () => noteController.deleteNote(
-                                      widget.note!.id!,
+                                      widget.note!.id,
                                       context,
                                     ),
                                 context: context,

@@ -67,7 +67,7 @@ class SigninScreen extends StatelessWidget {
                   onTap: () {
                     if (authController.formKeySignin.currentState!.validate()) {
                       authController.formKeySignin.currentState!.save();
-                      authController.doSignIn();
+                      authController.signIn();
                     }
                   },
                   child: Container(
