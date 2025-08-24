@@ -2,24 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:sandbox_notes_app/screens/home_screen.dart';
-import 'package:sandbox_notes_app/storage/user.dart';
+import 'package:sandbox_notes_app/screens/signin_screen.dart';
+import 'package:sandbox_notes_app/storage/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 class AuthController extends GetxController {
-  var isLoggedIn = false.obs;
   GlobalKey<FormState> formKeySignup = GlobalKey<FormState>();
   GlobalKey<FormState> formKeySignin = GlobalKey<FormState>();
   RxString emailController = "".obs;
   RxString passwordController = "".obs;
   RxString fullNameController = "".obs;
   Uuid uuid = const Uuid();
+  final _isLoggedIn = false.obs;
+  late Box _settingsBox;
+  RxBool isHide = true.obs;
 
-  // doSignIn() {
-  //   if (emailController.isNotEmpty && passwordController.isNotEmpty) {
-  //     isLoggedIn.value = true;
-  //     Get.replace(() => HomeScreen());
-  //   }
-  // }
+  RxBool get isLoggedIn => _isLoggedIn;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Buka box yang sudah dibuat di main()
+    _settingsBox = Hive.box('settings');
+    // Muat status login dari Hive
+    _isLoggedIn.value = _settingsBox.get('isLoggedIn', defaultValue: false);
+  }
+
+  void logout() async {
+    await _settingsBox.put('isLoggedIn', false);
+    _isLoggedIn.value = false;
+    Get.offAll(() => SigninScreen());
+  }
 
   Future register(
     BuildContext context, {
@@ -28,9 +41,9 @@ class AuthController extends GetxController {
     required String password,
   }) async {
     // Buka box
-    var box = await Hive.openBox<User>('user');
+    var box = await Hive.openBox<UserModel>('user');
     try {
-      User data = User(
+      UserModel data = UserModel(
         id: uuid.v4(),
         name: name,
         email: email,
@@ -83,14 +96,15 @@ class AuthController extends GetxController {
 
   Future signIn() async {
     try {
-      var box = await Hive.openBox<User>('user');
+      var box = await Hive.openBox<UserModel>('user');
       final isExisting = box.values.any(
         (user) =>
             user.email == emailController.value &&
             user.password == passwordController.value,
       );
       if (isExisting) {
-        isLoggedIn.value = true;
+        await _settingsBox.put('isLoggedIn', true);
+        _isLoggedIn.value = true;
         Get.replace(() => HomeScreen());
       } else {
         Get.snackbar("Error", "Email or Password is wrong");
@@ -98,10 +112,5 @@ class AuthController extends GetxController {
     } catch (e) {
       throw Exception(e.toString());
     }
-  }
-
-  clearLocalStorage() async {
-    var box = await Hive.openBox<User>('user');
-    box.clear();
   }
 }

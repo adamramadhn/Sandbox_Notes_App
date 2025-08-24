@@ -5,13 +5,14 @@ import 'package:sandbox_notes_app/controllers/auth_controller.dart';
 import 'package:sandbox_notes_app/screens/home_screen.dart';
 import 'package:sandbox_notes_app/screens/signin_screen.dart';
 import 'package:sandbox_notes_app/storage/note_item_model.dart';
-import 'package:sandbox_notes_app/storage/user.dart';
+import 'package:sandbox_notes_app/storage/user_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(UserModelAdapter());
   Hive.registerAdapter(NoteItemModelAdapter());
+  await Hive.openBox('settings');
   runApp(const MyApp());
 }
 

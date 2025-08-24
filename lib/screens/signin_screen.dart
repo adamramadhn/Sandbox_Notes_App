@@ -47,21 +47,34 @@ class SigninScreen extends StatelessWidget {
                 SizedBox(height: 16),
                 Text('Password', style: TextTheme.of(context).labelMedium),
                 SizedBox(height: 8),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                Obx(
+                  () => TextFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          authController.isHide.value =
+                              !authController.isHide.value;
+                        },
+                        child: Icon(
+                          authController.isHide.value
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                    onSaved: (newValue) {
+                      authController.passwordController.value = newValue ?? '';
+                    },
+                    obscureText: authController.isHide.value,
+                    obscuringCharacter: '*',
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    return null;
-                  },
-                  onSaved: (newValue) {
-                    authController.passwordController.value = newValue ?? '';
-                  },
-                  obscureText: true,
-                  obscuringCharacter: '*',
                 ),
                 GestureDetector(
                   onTap: () {

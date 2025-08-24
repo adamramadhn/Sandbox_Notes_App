@@ -30,9 +30,9 @@ class NoteScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final note = noteController.notes[index];
             return ListTile(
-              title: Text(note.title ?? ''),
+              title: Text(note.title),
               subtitle: Text(
-                note.content ?? '',
+                note.content,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -42,7 +42,7 @@ class NoteScreen extends StatelessWidget {
               trailing: IconButton(
                 icon: const Icon(Icons.delete, color: Colors.red),
                 onPressed: () {
-                  noteController.deleteNote(note.id ?? '', context);
+                  noteController.deleteNote(note.id, context);
                 },
               ),
             );

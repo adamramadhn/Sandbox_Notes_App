@@ -1,9 +1,9 @@
 import 'package:hive/hive.dart';
 
-part 'user.g.dart'; // Ini akan dibuat secara otomatis
+part 'user_model.g.dart'; // Ini akan dibuat secara otomatis
 
 @HiveType(typeId: 0)
-class User extends HiveObject {
+class UserModel extends HiveObject {
   @HiveField(0)
   String id;
 
@@ -16,7 +16,7 @@ class User extends HiveObject {
   @HiveField(3)
   String password;
 
-  User({
+  UserModel({
     required this.id,
     required this.name,
     required this.email,

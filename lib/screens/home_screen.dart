@@ -56,8 +56,7 @@ class HomeScreen extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          noteController.notes[index].title ??
-                                              '',
+                                          noteController.notes[index].title,
                                           style: Theme.of(context)
                                               .textTheme
                                               .labelMedium
@@ -67,10 +66,7 @@ class HomeScreen extends StatelessWidget {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            noteController
-                                                    .notes[index]
-                                                    .content ??
-                                                '',
+                                            noteController.notes[index].content,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodySmall
